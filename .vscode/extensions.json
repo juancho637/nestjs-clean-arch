@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "mikehanson.auto-barrel",
+    "esbenp.prettier-vscode"
+  ]
+}
