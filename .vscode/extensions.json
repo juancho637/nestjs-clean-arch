@@ -1,7 +1,7 @@
 {
   "recommendations": [
     "dbaeumer.vscode-eslint",
-    "mikehanson.auto-barrel",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "guilhermetheodoro.typescript-indexing"
   ]
 }

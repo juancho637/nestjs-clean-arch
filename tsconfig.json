@@ -16,6 +16,10 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@ecommerce/config": ["./src/config"],
+      "@ecommerce/modules/users": ["./src/modules/users"],
+    }
   }
 }

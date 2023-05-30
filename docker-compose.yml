@@ -1,0 +1,54 @@
+version: '3'
+services:
+    pgsql:
+        image: 'postgres:13'
+        ports:
+            - '${DB_PORT:-5432}:5432'
+        environment:
+            PGPASSWORD: '${DB_PASSWORD:-secret}'
+            POSTGRES_DB: '${DB_DATABASE}'
+            POSTGRES_USER: '${DB_USERNAME}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+        volumes:
+            - 'pgsql:/var/lib/postgresql/data'
+        networks:
+            - ecommerce
+        healthcheck:
+            test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
+            retries: 3
+            timeout: 5s
+    # redis:
+    #     image: 'redis:alpine'
+    #     ports:
+    #         - '${FORWARD_REDIS_PORT:-6379}:6379'
+    #     volumes:
+    #         - 'sail-redis:/data'
+    #     networks:
+    #         - sail
+    #     healthcheck:
+    #         test: ["CMD", "redis-cli", "ping"]
+    #         retries: 3
+    #         timeout: 5s
+    # meilisearch:
+    #     image: 'getmeili/meilisearch:latest'
+    #     ports:
+    #         - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
+    #     volumes:
+    #         - 'sail-meilisearch:/data.ms'
+    #     networks:
+    #         - sail
+    #     healthcheck:
+    #         test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:7700/health"]
+    #         retries: 3
+    #         timeout: 5s
+
+networks:
+    ecommerce:
+        driver: bridge
+volumes:
+    pgsql:
+        driver: local
+    # redis:
+    #     driver: local
+    # meilisearch:
+    #     driver: local
