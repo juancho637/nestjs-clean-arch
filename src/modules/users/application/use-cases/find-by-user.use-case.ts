@@ -1,9 +1,11 @@
-import { UserRepository } from '@ecommerce/modules/users';
+import { UserRepository, UserType } from '../../domain';
 
 export class FindByUserUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async run(): Promise<string> {
-    return 'FindByUserUseCase';
+  async run(id: number): Promise<UserType> {
+    const user = await this.userRepository.findOneBy(['id', '=', id]);
+
+    return user;
   }
 }

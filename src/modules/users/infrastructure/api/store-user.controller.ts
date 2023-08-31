@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 
 @Controller()
 export class StoreUserController {
-  run() {
+  async run() {
     return 'StoreUserController';
   }
 }

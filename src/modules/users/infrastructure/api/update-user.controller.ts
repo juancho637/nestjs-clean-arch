@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 
 @Controller()
 export class UpdateUserController {
-  run() {
+  async run() {
     return 'UpdateUserController';
   }
 }

@@ -1,13 +1,18 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   FindAllUsersController,
   FindByUserController,
   StoreUserController,
   UpdateUserController,
-  UserTypeOrmEntity,
-  UserTypeOrmRepository,
-} from '@ecommerce/modules/users';
+} from './api';
+import { UserTypeOrmEntity, UserTypeOrmRepository } from './persistence';
+import {
+  FindAllUsersUseCase,
+  FindByUserUseCase,
+  StoreUserUseCase,
+  UpdateUserUseCase,
+} from '../application';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserTypeOrmEntity])],
@@ -17,6 +22,16 @@ import {
     StoreUserController,
     UpdateUserController,
   ],
-  providers: [UserTypeOrmRepository],
+  providers: [
+    FindAllUsersUseCase,
+    FindByUserUseCase,
+    StoreUserUseCase,
+    UpdateUserUseCase,
+    Logger,
+    {
+      provide: 'UserRepository',
+      useClass: UserTypeOrmRepository,
+    },
+  ],
 })
 export class UserModule {}

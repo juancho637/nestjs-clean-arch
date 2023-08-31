@@ -1,10 +1,10 @@
-import { UserRepository, UserType } from '@ecommerce/modules/users';
+import { UserRepository, UserType } from '../../domain';
 
 export class FindAllUsersUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
   async run(): Promise<UserType[]> {
-    const users = this.userRepository.findAll();
+    const users = await this.userRepository.findAll();
 
     return users;
   }

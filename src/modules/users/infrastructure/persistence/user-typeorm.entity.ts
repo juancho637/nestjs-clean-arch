@@ -1,10 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { UserType } from '@ecommerce/modules/users';
 
-// @Index('user_email_password_index', ['email', 'password', 'deletedAt'])
-// @Index('user_email_index', ['email', 'deletedAt'], { unique: true })
-// @Index('user_status_index', ['status', 'deletedAt'])
-// @Index('user_pk', ['userId'], { unique: true })
 @Entity({ name: 'users' })
 export class UserTypeOrmEntity implements UserType {
   @PrimaryGeneratedColumn()
@@ -39,6 +35,7 @@ export class UserTypeOrmEntity implements UserType {
   status: boolean;
 
   @Column({
+    name: 'created_at',
     type: 'timestamp with time zone',
     nullable: false,
     default: () => 'now()',
@@ -46,17 +43,17 @@ export class UserTypeOrmEntity implements UserType {
   createdAt: Date;
 
   @Column({
+    name: 'updated_at',
     type: 'timestamp with time zone',
-    nullable: true,
+    nullable: false,
+    default: () => 'now()',
   })
   updateAt?: Date;
 
   @Column({
+    name: 'deleted_at',
     type: 'timestamp with time zone',
     nullable: true,
   })
   deletedAt?: Date;
-
-  // @ManyToOne(() => RolePostgresEntity, (role) => role.users)
-  // role: RolePostgresEntity;
 }
