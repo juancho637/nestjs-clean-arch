@@ -1,7 +1,7 @@
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserRepository } from '../../domain/user.repository';
+import { UserRepository } from '../../domain';
 import { UserTypeOrmEntity } from './user-typeorm.entity';
 
 export class UserTypeOrmRepository

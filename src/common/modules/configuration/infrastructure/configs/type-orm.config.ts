@@ -1,4 +1,4 @@
-import { TypeOrmConfigType } from './types';
+import { TypeOrmConfigType } from '../../domain';
 
 export class TypeOrmConfig {
   private static instance: TypeOrmConfig;

@@ -1,4 +1,4 @@
-import { DataBaseConfigType } from './types';
+import { DataBaseConfigType } from '../../domain';
 
 export class DataBaseConfig {
   private static instance: DataBaseConfig;

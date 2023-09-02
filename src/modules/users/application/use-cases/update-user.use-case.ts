@@ -1,4 +1,4 @@
-import { UserRepository } from '@ecommerce/modules/users';
+import { UserRepository } from '../../domain';
 
 export class UpdateUserUseCase {
   constructor(private readonly userRepository: UserRepository) {}

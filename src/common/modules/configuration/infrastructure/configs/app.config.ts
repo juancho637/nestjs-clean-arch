@@ -1,4 +1,4 @@
-import { AppConfigType } from './types';
+import { AppConfigType } from '../../domain';
 
 export class AppConfig {
   private static instance: AppConfig;
@@ -10,9 +10,8 @@ export class AppConfig {
       port: parseInt(process.env.APP_PORT ?? '3000'),
       name: process.env.APP_NAME ?? 'App Name',
       debug: process.env.APP_DEBUG === 'true',
+      url: this.setUrl(),
     };
-
-    this.setUrl();
   }
 
   static getInstance(): AppConfig {
@@ -26,13 +25,11 @@ export class AppConfig {
     return this._config;
   }
 
-  private setUrl(): void {
-    const urlConfig = {
-      url: process.env.APP_URL
-        ? `${process.env.APP_URL}:${this._config.port}`
-        : `http://localhost:${this._config.port}`,
-    };
+  private setUrl(): string {
+    const port = process.env.APP_PORT ?? '3000';
 
-    Object.assign(this._config, urlConfig);
+    return process.env.APP_URL
+      ? `${process.env.APP_URL}:${port}`
+      : `http://localhost:${port}`;
   }
 }

@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "typeorm-ts-node-commonjs",
     "typeorm:migrate": "npm run typeorm -- migration:run -d ormconfig.ts",
-    "typeorm:create": "npm run typeorm migration:create src/providers/typeorm/migrations/${npm_config_name}"
+    "typeorm:create": "npm run typeorm migration:create database/migrations/${npm_config_name}"
   },
   "dependencies": {
     "@apollo/server": "^4.9.1",

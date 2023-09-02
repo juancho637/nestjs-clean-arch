@@ -1,4 +1,4 @@
-import { JwtConfigType } from './types';
+import { JwtConfigType } from '../../domain';
 
 export class JwtConfig {
   private static instance: JwtConfig;

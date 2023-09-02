@@ -3,5 +3,5 @@ export type AppConfigType = {
   port: number;
   name: string;
   debug: boolean;
-  // url: string;
+  url: string;
 };
