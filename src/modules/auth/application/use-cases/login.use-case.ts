@@ -6,7 +6,6 @@ export class LoginUseCase {
 
   async run({ email }: LoginType): Promise<AuthType> {
     const user = await this.userRepository.findOneBy({ email });
-    console.log(user);
 
     return {
       accessToken: user.email,
