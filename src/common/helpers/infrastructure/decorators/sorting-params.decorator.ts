@@ -7,7 +7,7 @@ import { Request } from 'express';
 import { SortingType } from '../../domain';
 
 export const SortingParams = createParamDecorator(
-  (validParams, ctx: ExecutionContext): SortingType => {
+  (validParams: string[], ctx: ExecutionContext): SortingType => {
     const req: Request = ctx.switchToHttp().getRequest();
     const sort = req.query.sort as string;
     if (!sort) return null;
