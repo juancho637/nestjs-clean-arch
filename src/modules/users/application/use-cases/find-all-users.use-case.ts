@@ -1,4 +1,8 @@
-import { FilteringType, PaginationType, SortingType } from 'src/common';
+import {
+  FilteringType,
+  PaginationType,
+  SortingType,
+} from '@ecommerce/common/helpers';
 import { UserRepository, UserType } from '../../domain';
 
 export class FindAllUsersUseCase {
