@@ -1,22 +1,30 @@
 import { join } from 'path';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import { ConfigurationService } from '../../configuration';
+import {
+  ConfigurationType,
+  DataBaseConfigType,
+  TypeOrmConfigType,
+} from '@ecommerce/common/configuration';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
-  constructor(private configurationService: ConfigurationService) {}
+  constructor(private configService: ConfigService<ConfigurationType>) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
+    const database = this.configService.get<DataBaseConfigType>('database');
+    const typeOrm = this.configService.get<TypeOrmConfigType>('typeOrm');
+
     return {
       type: 'postgres',
-      host: this.configurationService.getConfig().database.host,
-      port: this.configurationService.getConfig().database.port,
-      username: this.configurationService.getConfig().database.username,
-      password: this.configurationService.getConfig().database.password,
-      database: this.configurationService.getConfig().database.database,
-      logging: this.configurationService.getConfig().typeOrm.logging,
-      synchronize: this.configurationService.getConfig().typeOrm.synchronize,
+      host: database.host,
+      port: database.port,
+      username: database.username,
+      password: database.password,
+      database: database.database,
+      logging: typeOrm.logging,
+      synchronize: typeOrm.synchronize,
       entities: [
         join(
           __dirname,
