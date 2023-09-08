@@ -1,16 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import {
+  AppConfigType,
+  ConfigurationType,
+} from '@ecommerce/common/configuration';
 import { AppModule } from './app.module';
-import { AppConfigType, DefaultConfigType } from './config';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
-  const configService = app.get<ConfigService>(
-    ConfigService<DefaultConfigType>,
-  );
-  const appPort = configService.get<AppConfigType>('app').port;
+  const configService = app.get(ConfigService<ConfigurationType>);
+  const { port } = configService.get<AppConfigType>('app');
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -19,8 +20,8 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(appPort);
-  logger.log(`🚀 Server running on port: ${appPort}`);
+  await app.listen(port);
+  logger.log(`🚀 Server running on port: ${port}`);
 }
 
 bootstrap();

@@ -18,8 +18,10 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@ecommerce/config": ["./src/config"],
       "@ecommerce/modules/users": ["./src/modules/users"],
+      "@ecommerce/common/helpers": ["./src/common/helpers"],
+      "@ecommerce/common/configuration": ["./src/common/modules/configuration"],
+      "@ecommerce/common/database": ["./src/common/modules/database"],
     }
   }
 }

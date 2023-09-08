@@ -4,7 +4,7 @@ export class FindByUserUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
   async run(id: number): Promise<UserType> {
-    const user = await this.userRepository.findOneBy(['id', '=', id]);
+    const user = await this.userRepository.findOneBy({ id });
 
     return user;
   }

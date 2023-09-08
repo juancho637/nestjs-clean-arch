@@ -1,9 +1,11 @@
-import { UserRepository } from '@ecommerce/modules/users';
+import { CreateUserType, UserRepository, UserType } from '../../domain';
 
 export class StoreUserUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async run(): Promise<string> {
-    return 'StoreUserUseCase';
+  async run(createUser: CreateUserType): Promise<UserType> {
+    const user = await this.userRepository.store(createUser);
+
+    return user;
   }
 }

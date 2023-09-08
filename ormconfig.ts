@@ -13,16 +13,6 @@ export default new DataSource({
   database: process.env.DB_DATABASE,
   logging: process.env.TYPEORM_SYNCHRONIZE === 'true',
   synchronize: false,
-  entities: [join(__dirname, 'src', '**', '*.entity.{ts,js}')],
-  migrations: [
-    join(
-      __dirname,
-      'src',
-      'providers',
-      'typeorm',
-      'migrations',
-      '**',
-      '*.{ts,js}',
-    ),
-  ],
+  entities: [join(__dirname, 'src', 'modules', '**', '*.entity.{ts,js}')],
+  migrations: [join(__dirname, 'database', 'migrations', '**', '*.{ts,js}')],
 });

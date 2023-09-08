@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { UserType } from '@ecommerce/modules/users';
+import { UserType } from '../../domain';
 
 @Entity({ name: 'users' })
 export class UserTypeOrmEntity implements UserType {

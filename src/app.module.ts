@@ -1,24 +1,14 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigurationModule, DatabaseModule } from './common';
 import { UserModule } from './modules/users/infrastructure/user.module';
-import { TypeOrmConfigService } from './providers';
-import { DefaultConfig } from './config';
+import { AuthModule } from './modules/auth/infrastructure/auth.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      load: [DefaultConfig.getInstance().getConfig],
-      isGlobal: true,
-    }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useClass: TypeOrmConfigService,
-      inject: [ConfigService],
-    }),
-    UserModule,
+    ConfigurationModule,
+    DatabaseModule,
+    UserModule.register(),
+    AuthModule.register(),
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}
