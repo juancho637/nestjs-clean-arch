@@ -48,7 +48,7 @@ export class UserTypeOrmEntity implements UserType {
     nullable: false,
     default: () => 'now()',
   })
-  updateAt?: Date;
+  updatedAt: Date;
 
   @Column({
     name: 'deleted_at',

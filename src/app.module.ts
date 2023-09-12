@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ConfigurationModule, DatabaseModule } from './common';
+import { ConfigurationModule } from '@ecommerce/common/configuration';
+import { DatabaseModule } from '@ecommerce/common/database';
+import { LoggerModule } from '@ecommerce/common/logger';
 import { UserModule } from './modules/users/infrastructure/user.module';
 import { AuthModule } from './modules/auth/infrastructure/auth.module';
 
@@ -7,6 +9,7 @@ import { AuthModule } from './modules/auth/infrastructure/auth.module';
   imports: [
     ConfigurationModule,
     DatabaseModule,
+    LoggerModule,
     UserModule.register(),
     AuthModule.register(),
   ],

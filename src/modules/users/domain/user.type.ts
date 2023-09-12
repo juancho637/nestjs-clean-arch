@@ -4,4 +4,7 @@ export type UserType = {
   email: string;
   password: string;
   status: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Date;
 };

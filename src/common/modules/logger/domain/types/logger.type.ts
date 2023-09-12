@@ -1,4 +1,4 @@
-export type LoggerDebugType = {
+export type LoggerType = {
   context: string;
   message: string;
 };

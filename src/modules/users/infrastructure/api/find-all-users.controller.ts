@@ -6,9 +6,11 @@ import {
   PaginationType,
   SortingType,
   SortingParams,
+  PaginatedResourceType,
 } from '@ecommerce/common/helpers';
 import { FindAllUsersUseCase } from '../../application';
-import { UserUseCasesEnum } from '../../domain';
+import { UserType, UserUseCasesEnum } from '../../domain';
+import { UserPresenter } from '../user.presenter';
 
 @Controller()
 export class FindAllUsersController {
@@ -22,11 +24,16 @@ export class FindAllUsersController {
     @PaginationParams() paginationParams: PaginationType,
     @SortingParams(['id', 'name', 'email']) sortParams?: SortingType,
     @FilteringParams(['id', 'name', 'email']) filterParams?: FilteringType[],
-  ) {
-    return await this.findAllUsersUseCase.run(
+  ): Promise<PaginatedResourceType<Partial<UserType>>> {
+    const userResource = await this.findAllUsersUseCase.run(
       paginationParams,
       sortParams,
       filterParams,
     );
+
+    return {
+      ...userResource,
+      items: userResource.items.map((user) => new UserPresenter(user)),
+    };
   }
 }

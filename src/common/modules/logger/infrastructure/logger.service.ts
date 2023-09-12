@@ -1,36 +1,29 @@
 import { Injectable, Logger } from '@nestjs/common';
-import {
-  LoggerDebugType,
-  LoggerErrorType,
-  LoggerInterface,
-  LoggerLogType,
-  LoggerVerboseType,
-  LoggerWarnType,
-} from '../domain';
+import { LoggerErrorType, LoggerInterface, LoggerType } from '../domain';
 
 @Injectable()
 export class LoggerService extends Logger implements LoggerInterface {
-  debug({ context, message }: LoggerDebugType) {
+  debug({ message, context }: LoggerType) {
     if (process.env.NODE_ENV !== 'production') {
-      super.debug(`[DEBUG] ${message}`, context);
+      super.debug(message, context);
     }
   }
 
-  log({ context, message }: LoggerLogType) {
-    super.log(`[INFO] ${message}`, context);
+  log({ message, context }: LoggerType) {
+    super.log(message, context);
   }
 
-  error({ context, message, trace }: LoggerErrorType) {
-    super.error(`[ERROR] ${message}`, trace, context);
+  error({ message, trace, context }: LoggerErrorType) {
+    super.error(message, trace, context);
   }
 
-  warn({ context, message }: LoggerWarnType) {
-    super.warn(`[WARN] ${message}`, context);
+  warn({ message, context }: LoggerType) {
+    super.warn(message, context);
   }
 
-  verbose({ context, message }: LoggerVerboseType) {
+  verbose({ message, context }: LoggerType) {
     if (process.env.NODE_ENV !== 'production') {
-      super.verbose(`[VERBOSE] ${message}`, context);
+      super.verbose(message, context);
     }
   }
 }

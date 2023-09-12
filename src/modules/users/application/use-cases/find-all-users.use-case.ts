@@ -1,5 +1,6 @@
 import {
   FilteringType,
+  PaginatedResourceType,
   PaginationType,
   SortingType,
 } from '@ecommerce/common/helpers';
@@ -12,9 +13,13 @@ export class FindAllUsersUseCase {
     pagination: PaginationType,
     sort: SortingType,
     filters: FilteringType[],
-  ): Promise<UserType[]> {
-    const users = await this.userRepository.findAll(pagination, sort, filters);
+  ): Promise<PaginatedResourceType<Partial<UserType>>> {
+    const userResource = await this.userRepository.findAll(
+      pagination,
+      sort,
+      filters,
+    );
 
-    return users;
+    return userResource;
   }
 }

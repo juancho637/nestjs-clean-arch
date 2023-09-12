@@ -1,4 +1,4 @@
-import { DynamicModule, Logger, Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   FindAllUsersController,
@@ -15,9 +15,10 @@ import {
   UpdateUserUseCase,
 } from '../application';
 import { UserUseCasesEnum } from '../domain';
+import { LoggerModule } from '@ecommerce/common/logger';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserTypeOrmEntity])],
+  imports: [LoggerModule, TypeOrmModule.forFeature([UserTypeOrmEntity])],
 })
 export class UserModule {
   static register(): DynamicModule {
@@ -30,7 +31,6 @@ export class UserModule {
         UpdateUserController,
       ],
       providers: [
-        Logger,
         UserTypeOrmRepository,
         {
           inject: [UserTypeOrmRepository],

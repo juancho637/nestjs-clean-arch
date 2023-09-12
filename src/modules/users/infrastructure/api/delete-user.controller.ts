@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { UserUseCasesEnum } from '../../domain';
 import { DeleteUserUseCase } from '../../application';
+import { UserPresenter } from '../user.presenter';
 
 @Controller()
 export class DeleteUserController {
@@ -16,7 +17,9 @@ export class DeleteUserController {
   ) {}
 
   @Delete('api/users/:id')
-  async run(@Param('id', ParseIntPipe) id: number) {
-    return this.deleteUserUseCase.run(id);
+  async run(@Param('id', ParseIntPipe) id: number): Promise<UserPresenter> {
+    const user = await this.deleteUserUseCase.run(id);
+
+    return new UserPresenter(user);
   }
 }

@@ -22,6 +22,7 @@
       "@ecommerce/common/helpers": ["./src/common/helpers"],
       "@ecommerce/common/configuration": ["./src/common/modules/configuration"],
       "@ecommerce/common/database": ["./src/common/modules/database"],
+      "@ecommerce/common/logger": ["./src/common/modules/logger"],
     }
   }
 }

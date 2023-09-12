@@ -9,6 +9,7 @@ import {
 import { UserUseCasesEnum } from '../../domain';
 import { UpdateUserUseCase } from '../../application';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { UserPresenter } from '../user.presenter';
 
 @Controller()
 export class UpdateUserController {
@@ -21,7 +22,9 @@ export class UpdateUserController {
   async run(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return await this.updateUserUseCase.run(id, updateUserDto);
+  ): Promise<UserPresenter> {
+    const user = await this.updateUserUseCase.run(id, updateUserDto);
+
+    return new UserPresenter(user);
   }
 }
