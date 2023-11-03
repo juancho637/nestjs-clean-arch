@@ -3,10 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   FindAllUsersController,
   FindByUserController,
+  FindByUserResolver,
   StoreUserController,
   UpdateUserController,
 } from './api';
-import { UserTypeOrmEntity, UserTypeOrmRepository } from './persistence';
+import { UserEntity, UserTypeOrmRepository } from './persistence';
 import {
   DeleteUserUseCase,
   FindAllUsersUseCase,
@@ -18,7 +19,7 @@ import { UserUseCasesEnum } from '../domain';
 import { LoggerModule } from '@ecommerce/common/logger';
 
 @Module({
-  imports: [LoggerModule, TypeOrmModule.forFeature([UserTypeOrmEntity])],
+  imports: [LoggerModule, TypeOrmModule.forFeature([UserEntity])],
 })
 export class UserModule {
   static register(): DynamicModule {
@@ -62,6 +63,7 @@ export class UserModule {
           useFactory: (userRepositoy: UserTypeOrmRepository) =>
             new DeleteUserUseCase(userRepositoy),
         },
+        FindByUserResolver,
       ],
       exports: [UserTypeOrmRepository],
     };

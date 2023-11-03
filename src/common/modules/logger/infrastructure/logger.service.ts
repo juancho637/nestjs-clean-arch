@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { LoggerErrorType, LoggerInterface, LoggerType } from '../domain';
+import { LoggerInterface, LoggerType } from '../domain';
 
 @Injectable()
 export class LoggerService extends Logger implements LoggerInterface {
@@ -13,7 +13,7 @@ export class LoggerService extends Logger implements LoggerInterface {
     super.log(message, context);
   }
 
-  error({ message, trace, context }: LoggerErrorType) {
+  error({ message, trace, context }: LoggerType) {
     super.error(message, trace, context);
   }
 

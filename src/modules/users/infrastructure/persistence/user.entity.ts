@@ -1,9 +1,12 @@
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { UserType } from '../../domain';
 
 @Entity({ name: 'users' })
-export class UserTypeOrmEntity implements UserType {
+@ObjectType()
+export class UserEntity implements UserType {
   @PrimaryGeneratedColumn()
+  @Field(() => ID)
   id: number;
 
   @Column({
@@ -11,6 +14,7 @@ export class UserTypeOrmEntity implements UserType {
     length: 50,
     nullable: false,
   })
+  @Field(() => String)
   name: string;
 
   @Column({
@@ -18,6 +22,7 @@ export class UserTypeOrmEntity implements UserType {
     length: 100,
     nullable: false,
   })
+  @Field(() => String)
   email: string;
 
   @Column({
@@ -40,6 +45,7 @@ export class UserTypeOrmEntity implements UserType {
     nullable: false,
     default: () => 'now()',
   })
+  @Field(() => String)
   createdAt: Date;
 
   @Column({
@@ -48,6 +54,7 @@ export class UserTypeOrmEntity implements UserType {
     nullable: false,
     default: () => 'now()',
   })
+  @Field(() => String)
   updatedAt: Date;
 
   @Column({
@@ -55,5 +62,6 @@ export class UserTypeOrmEntity implements UserType {
     type: 'timestamp with time zone',
     nullable: true,
   })
+  @Field(() => String)
   deletedAt?: Date;
 }

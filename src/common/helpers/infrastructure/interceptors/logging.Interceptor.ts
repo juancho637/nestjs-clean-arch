@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Request } from 'express';
 import { LoggerService } from '@ecommerce/common/logger';
+import { GqlExecutionContext } from '@nestjs/graphql';
+import { GraphQLResolveInfo } from 'graphql';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -15,24 +17,35 @@ export class LoggingInterceptor implements NestInterceptor {
 
   constructor(private readonly logger: LoggerService) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<void> {
     const now = Date.now();
-    const httpContext = context.switchToHttp();
-    const request = httpContext.getRequest();
+    const httpCtx = context.switchToHttp();
+
+    const gqlCtx = GqlExecutionContext.create(context);
+    const info = gqlCtx.getInfo<GraphQLResolveInfo>();
+
+    const request = httpCtx.getRequest<Request>() || gqlCtx.getContext().req;
+
     const ip = this.getIP(request);
 
     this.logger.log({
-      message: `Incoming Request on ${request.path} method=${request.method} ip=${ip}`,
-      context: this.loggerContext,
+      context: `Incoming Request on ${
+        context.getType() === 'http' ? request.path : info.fieldName
+      }`,
+      message: `method=${
+        context.getType() === 'http' ? request.method : info.parentType
+      } ip=${ip}`,
     });
 
     return next.handle().pipe(
       tap(() => {
         this.logger.log({
-          message: `End Request for ${request.path} method=${
-            request.method
+          context: `End Request for ${
+            context.getType() === 'http' ? request.path : info.fieldName
+          }`,
+          message: `method=${
+            context.getType() === 'http' ? request.method : info.parentType
           } ip=${ip} duration=${Date.now() - now}ms`,
-          context: this.loggerContext,
         });
       }),
     );

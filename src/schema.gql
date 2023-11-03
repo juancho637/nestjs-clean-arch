@@ -1,0 +1,16 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Query {
+  user(id: ID!): UserEntity!
+}
+
+type UserEntity {
+  createdAt: String!
+  deletedAt: String!
+  email: String!
+  id: ID!
+  name: String!
+  updatedAt: String!
+}

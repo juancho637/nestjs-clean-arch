@@ -1,3 +1,4 @@
+export * from './error.interface';
 export * from './filter-rule.enum';
 export * from './filtering.type';
 export * from './paginated-resource.type';

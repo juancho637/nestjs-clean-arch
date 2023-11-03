@@ -9,6 +9,7 @@ import { LoggerService } from '@ecommerce/common/logger';
 import {
   ResponseInterceptor,
   LoggingInterceptor,
+  AllExceptionFilter,
 } from '@ecommerce/common/helpers';
 import { AppModule } from './app.module';
 
@@ -18,8 +19,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService<ConfigurationType>);
   const { port } = configService.get<AppConfigType>('app');
 
-  app.useGlobalInterceptors(new LoggingInterceptor(logger));
-  app.useGlobalInterceptors(new ResponseInterceptor());
+  app.useGlobalFilters(new AllExceptionFilter(logger));
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -27,6 +27,9 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  app.useGlobalInterceptors(new LoggingInterceptor(logger));
+  app.useGlobalInterceptors(new ResponseInterceptor());
 
   await app.listen(port);
   logger.log({

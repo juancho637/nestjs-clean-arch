@@ -19,10 +19,13 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@ecommerce/modules/users": ["./src/modules/users"],
+      "@ecommerce/modules/auth": ["./src/modules/auth"],
       "@ecommerce/common/helpers": ["./src/common/helpers"],
       "@ecommerce/common/configuration": ["./src/common/modules/configuration"],
       "@ecommerce/common/database": ["./src/common/modules/database"],
       "@ecommerce/common/logger": ["./src/common/modules/logger"],
+      "@ecommerce/common/exceptions": ["./src/common/modules/exceptions"],
+      "@ecommerce/common/gql": ["./src/common/modules/gql"],
     }
   }
 }

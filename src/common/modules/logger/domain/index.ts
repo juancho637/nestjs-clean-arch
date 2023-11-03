@@ -1,2 +1,2 @@
 export * from './logger.interface';
-export * from './types';
+export * from './logger.type';

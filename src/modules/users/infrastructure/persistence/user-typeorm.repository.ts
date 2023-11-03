@@ -7,7 +7,7 @@ import {
   UpdateUserType,
   CreateUserType,
 } from '../../domain';
-import { UserTypeOrmEntity } from './user-typeorm.entity';
+import { UserEntity } from './user.entity';
 import {
   FilteringType,
   PaginationType,
@@ -18,24 +18,24 @@ import {
 import { LoggerService } from '@ecommerce/common/logger';
 import { PaginatedResourceType } from '@ecommerce/common/helpers';
 
-export class UserTypeOrmRepository
-  implements UserRepository<UserTypeOrmEntity>
-{
-  private readonly loggerContext = UserTypeOrmEntity.name;
+export class UserTypeOrmRepository implements UserRepository<UserEntity> {
+  private readonly loggerContext = UserEntity.name;
 
   constructor(
-    @InjectRepository(UserTypeOrmEntity)
-    private readonly usersRepository: Repository<UserTypeOrmEntity>,
+    @InjectRepository(UserEntity)
+    private readonly usersRepository: Repository<UserEntity>,
     private readonly logger: LoggerService,
   ) {}
 
-  async findOneBy(fields: UserFilterType): Promise<UserTypeOrmEntity> {
+  async findOneBy(fields: UserFilterType): Promise<UserEntity> {
     try {
-      return await this.usersRepository.findOne({
+      const user = await this.usersRepository.findOneOrFail({
         where: { ...fields },
       });
+
+      return user;
     } catch (error) {
-      this.logger.error({ message: error, context: this.loggerContext });
+      // this.logger.error({ message: error, context: this.loggerContext });
 
       throw new InternalServerErrorException(error);
     }
@@ -45,7 +45,7 @@ export class UserTypeOrmRepository
     pagination: PaginationType,
     sort: SortingType,
     filters: FilteringType[],
-  ): Promise<PaginatedResourceType<Partial<UserTypeOrmEntity>>> {
+  ): Promise<PaginatedResourceType<Partial<UserEntity>>> {
     try {
       const { page, size } = pagination;
       const where = getWhereTypeOrmHelper(filters);
@@ -74,9 +74,9 @@ export class UserTypeOrmRepository
     }
   }
 
-  async store(createUserFields: CreateUserType): Promise<UserTypeOrmEntity> {
+  async store(createUserFields: CreateUserType): Promise<UserEntity> {
     try {
-      return this.usersRepository.create(createUserFields);
+      return this.usersRepository.save(createUserFields);
     } catch (error) {
       this.logger.error({ message: error, context: this.loggerContext });
 
@@ -87,7 +87,7 @@ export class UserTypeOrmRepository
   async update(
     id: number,
     updateUserFields: UpdateUserType,
-  ): Promise<UserTypeOrmEntity> {
+  ): Promise<UserEntity> {
     try {
       const user = await this.findOneBy({ id });
 
@@ -99,7 +99,7 @@ export class UserTypeOrmRepository
     }
   }
 
-  async delete(id: number): Promise<UserTypeOrmEntity> {
+  async delete(id: number): Promise<UserEntity> {
     try {
       const user = await this.findOneBy({ id });
 
