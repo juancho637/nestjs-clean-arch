@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import {
   CallHandler,
   ExecutionContext,
@@ -5,28 +6,26 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, map } from 'rxjs';
-import { ResponseFormat } from '../response.format';
+import { ResponseFormatType } from '../../domain';
 
 @Injectable()
 export class ResponseInterceptor<T>
-  implements NestInterceptor<T, ResponseFormat<T>>
+  implements NestInterceptor<T, ResponseFormatType<T>>
 {
-  intercept(
-    context: ExecutionContext,
-    next: CallHandler,
-  ): Observable<ResponseFormat<T>> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const now = Date.now();
-    const httpContext = context.switchToHttp();
-    const request = httpContext.getRequest();
+    const httpCtx = context.switchToHttp();
+    const request = httpCtx.getRequest<Request>();
 
-    return next.handle().pipe(
-      map((data) => ({
-        data,
-        // isArray: Array.isArray(data.items),
-        path: request.path,
-        duration: `${Date.now() - now}ms`,
-        method: request.method,
-      })),
-    );
+    return context.getType() === 'http'
+      ? next.handle().pipe(
+          map((data) => ({
+            data,
+            path: request.path,
+            duration: `${Date.now() - now}ms`,
+            method: request.method,
+          })),
+        )
+      : next.handle();
   }
 }

@@ -6,7 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
@@ -18,11 +18,22 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@ecommerce/modules/users": ["./src/modules/users"],
-      "@ecommerce/common/helpers": ["./src/common/helpers"],
-      "@ecommerce/common/configuration": ["./src/common/modules/configuration"],
-      "@ecommerce/common/database": ["./src/common/modules/database"],
-      "@ecommerce/common/logger": ["./src/common/modules/logger"],
+      // Common
+      "@common/helpers/*": ["./src/common/helpers/*"],
+      "@common/adapters/configuration/*": [
+        "./src/common/adapters/configuration/*"
+      ],
+      "@common/adapters/database/*": ["./src/common/adapters/database/*"],
+      "@common/adapters/logger/*": ["./src/common/adapters/logger/*"],
+      "@common/adapters/exception/*": ["./src/common/adapters/exception/*"],
+      "@common/adapters/hash/*": ["./src/common/adapters/hash/*"],
+      "@common/adapters/token/*": ["./src/common/adapters/token/*"],
+
+      // Modules
+      "@modules/permissions/*": ["./src/modules/permissions/*"],
+      "@modules/roles/*": ["./src/modules/roles/*"],
+      "@modules/users/*": ["./src/modules/users/*"],
+      "@modules/auth/*": ["./src/modules/auth/*"]
     }
   }
 }

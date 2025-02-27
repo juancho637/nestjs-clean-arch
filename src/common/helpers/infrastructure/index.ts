@@ -2,4 +2,4 @@ export * from './decorators';
 export * from './get-order-type-orm.helper';
 export * from './get-where-type-orm.helper';
 export * from './interceptors';
-export * from './response.format';
+export * from './middlewares';

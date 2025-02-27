@@ -1,115 +1,164 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {
-  UserRepository,
-  UserFilterType,
-  UpdateUserType,
-  CreateUserType,
-} from '../../domain';
-import { UserTypeOrmEntity } from './user-typeorm.entity';
-import {
-  FilteringType,
-  PaginationType,
-  SortingType,
   getOrderTypeOrmHelper,
   getWhereTypeOrmHelper,
-} from '@ecommerce/common/helpers';
-import { LoggerService } from '@ecommerce/common/logger';
-import { PaginatedResourceType } from '@ecommerce/common/helpers';
+} from '@common/helpers/infrastructure';
+import {
+  FilterRuleEnum,
+  FindAllFieldsDto,
+  FindOneByFieldsDto,
+  PaginatedResourceType,
+} from '@common/helpers/domain';
+import {
+  LoggerProvidersEnum,
+  LoggerServiceInterface,
+} from '@common/adapters/logger/domain';
+import {
+  ExceptionProvidersEnum,
+  ExceptionServiceInterface,
+} from '@common/adapters/exception/domain';
+import {
+  UserRepositoryInterface,
+  UserFilterType,
+  // UpdateUserType,
+  userErrorsCodes,
+  UpdateUserType,
+  CreateUserRepositoryType,
+} from '../../domain';
+import { UserEntity } from './user.entity';
 
 export class UserTypeOrmRepository
-  implements UserRepository<UserTypeOrmEntity>
+  implements UserRepositoryInterface<UserEntity>
 {
-  private readonly loggerContext = UserTypeOrmEntity.name;
+  private readonly context = UserTypeOrmRepository.name;
 
   constructor(
-    @InjectRepository(UserTypeOrmEntity)
-    private readonly usersRepository: Repository<UserTypeOrmEntity>,
-    private readonly logger: LoggerService,
+    @InjectRepository(UserEntity)
+    readonly usersRepository: Repository<UserEntity>,
+    @Inject(LoggerProvidersEnum.LOGGER_SERVICE)
+    readonly logger: LoggerServiceInterface,
+    @Inject(ExceptionProvidersEnum.EXCEPTION_SERVICE)
+    readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async findOneBy(fields: UserFilterType): Promise<UserTypeOrmEntity> {
+  async findOneBy({
+    filter,
+    relations,
+  }: FindOneByFieldsDto<UserFilterType>): Promise<UserEntity> {
     try {
-      return await this.usersRepository.findOne({
-        where: { ...fields },
-      });
-    } catch (error) {
-      this.logger.error({ message: error, context: this.loggerContext });
+      const where = getWhereTypeOrmHelper<UserFilterType>(filter);
 
-      throw new InternalServerErrorException(error);
+      const user = await this.usersRepository.findOne({
+        where,
+        relations: relations || [],
+      });
+
+      return user;
+    } catch (error) {
+      throw this.exception.internalServerErrorException({
+        message: userErrorsCodes.UM010,
+        context: this.context,
+        error,
+      });
     }
   }
 
-  async findAll(
-    pagination: PaginationType,
-    sort: SortingType,
-    filters: FilteringType[],
-  ): Promise<PaginatedResourceType<Partial<UserTypeOrmEntity>>> {
+  async findAll({
+    pagination,
+    sort,
+    filters,
+    relations,
+  }: FindAllFieldsDto<UserFilterType> = {}): Promise<
+    PaginatedResourceType<UserEntity>
+  > {
     try {
-      const { page, size } = pagination;
-      const where = getWhereTypeOrmHelper(filters);
-      const order = getOrderTypeOrmHelper(sort);
+      const where = getWhereTypeOrmHelper<UserFilterType>(filters);
+      const order = getOrderTypeOrmHelper<UserFilterType>(sort);
+
+      const { page = 1, size } = pagination || {};
+
+      const skip = size && (page - 1) * size;
 
       const [users, count] = await this.usersRepository.findAndCount({
         where,
         order,
-        skip: (page - 1) * size,
+        relations,
+        skip,
         take: size,
       });
 
-      const lastPage = Math.ceil(count / size);
+      const lastPage = size ? Math.ceil(count / size) : 1;
 
       return {
         total: count,
-        current_page: page,
-        last_page: lastPage,
-        size,
+        currentPage: page,
+        lastPage,
+        size: size || count,
         items: users,
       };
     } catch (error) {
-      this.logger.error({ message: error, context: this.loggerContext });
-
-      throw new InternalServerErrorException(error);
+      throw this.exception.internalServerErrorException({
+        message: userErrorsCodes.UM020,
+        context: this.context,
+        error,
+      });
     }
   }
 
-  async store(createUserFields: CreateUserType): Promise<UserTypeOrmEntity> {
+  async store(
+    createUserFields: CreateUserRepositoryType | CreateUserRepositoryType[],
+  ): Promise<UserEntity | UserEntity[]> {
     try {
-      return this.usersRepository.create(createUserFields);
-    } catch (error) {
-      this.logger.error({ message: error, context: this.loggerContext });
+      if (Array.isArray(createUserFields)) {
+        return await this.usersRepository.save(createUserFields);
+      }
 
-      throw new InternalServerErrorException(error);
+      return await this.usersRepository.save(createUserFields);
+    } catch (error) {
+      throw this.exception.internalServerErrorException({
+        message: userErrorsCodes.UM030,
+        context: this.context,
+        error,
+      });
     }
   }
 
   async update(
     id: number,
     updateUserFields: UpdateUserType,
-  ): Promise<UserTypeOrmEntity> {
+  ): Promise<UserEntity> {
     try {
-      const user = await this.findOneBy({ id });
+      const user = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       return await this.usersRepository.save({ ...user, ...updateUserFields });
     } catch (error) {
-      this.logger.error({ message: error, context: this.loggerContext });
-
-      throw new InternalServerErrorException(error);
+      throw this.exception.internalServerErrorException({
+        message: userErrorsCodes.UM040,
+        context: this.context,
+        error,
+      });
     }
   }
 
-  async delete(id: number): Promise<UserTypeOrmEntity> {
+  async delete(id: number): Promise<UserEntity> {
     try {
-      const user = await this.findOneBy({ id });
+      const user = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
-      await this.usersRepository.remove(user);
+      await this.usersRepository.softRemove(user);
 
       return { ...user, id };
     } catch (error) {
-      this.logger.error({ message: error, context: this.loggerContext });
-
-      throw new InternalServerErrorException(error);
+      throw this.exception.internalServerErrorException({
+        message: userErrorsCodes.UM050,
+        context: this.context,
+        error,
+      });
     }
   }
 }

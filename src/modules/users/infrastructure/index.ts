@@ -1,3 +1,6 @@
 export * from './api';
+export * from './dto';
 export * from './persistence';
-export * from './user.module';
+export * from './seeders';
+export * from './user.presenter';
+export * from './users.module';

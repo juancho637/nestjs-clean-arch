@@ -4,22 +4,19 @@ import { ConfigService } from '@nestjs/config';
 import {
   AppConfigType,
   ConfigurationType,
-} from '@ecommerce/common/configuration';
-import { LoggerService } from '@ecommerce/common/logger';
+} from '@common/adapters/configuration/domain';
 import {
   ResponseInterceptor,
   LoggingInterceptor,
-} from '@ecommerce/common/helpers';
+} from '@common/helpers/infrastructure';
+import { LoggerProvidersEnum } from '@common/adapters/logger/domain';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const logger = app.get(LoggerService);
+  const app = await NestFactory.create(AppModule, { cors: true });
+  const logger = app.get(LoggerProvidersEnum.LOGGER_SERVICE);
   const configService = app.get(ConfigService<ConfigurationType>);
   const { port } = configService.get<AppConfigType>('app');
-
-  app.useGlobalInterceptors(new LoggingInterceptor(logger));
-  app.useGlobalInterceptors(new ResponseInterceptor());
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -28,7 +25,11 @@ async function bootstrap() {
     }),
   );
 
+  app.useGlobalInterceptors(new LoggingInterceptor(logger));
+  app.useGlobalInterceptors(new ResponseInterceptor());
+
   await app.listen(port);
+
   logger.log({
     context: 'Bootstrap',
     message: `🚀 Server running on port: ${port}`,

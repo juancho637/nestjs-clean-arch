@@ -7,7 +7,7 @@ import {
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Request } from 'express';
-import { LoggerService } from '@ecommerce/common/logger';
+import { LoggerService } from '@common/adapters/logger/infrastructure';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -15,24 +15,31 @@ export class LoggingInterceptor implements NestInterceptor {
 
   constructor(private readonly logger: LoggerService) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<void> {
     const now = Date.now();
-    const httpContext = context.switchToHttp();
-    const request = httpContext.getRequest();
+    const httpCtx = context.switchToHttp();
+
+    const request = httpCtx.getRequest<Request>();
+
     const ip = this.getIP(request);
+    const requestId = request.headers['x-request-id'] as string;
 
     this.logger.log({
-      message: `Incoming Request on ${request.path} method=${request.method} ip=${ip}`,
-      context: this.loggerContext,
+      context: `Incoming Request on ${request.path}`,
+      message: { method: request.method, ip: ip },
+      requestId,
     });
 
     return next.handle().pipe(
       tap(() => {
         this.logger.log({
-          message: `End Request for ${request.path} method=${
-            request.method
-          } ip=${ip} duration=${Date.now() - now}ms`,
-          context: this.loggerContext,
+          context: `End Request for ${request.path}`,
+          requestId,
+          message: {
+            method: request.method,
+            ip: ip,
+            duration: `${Date.now() - now}ms`,
+          },
         });
       }),
     );
