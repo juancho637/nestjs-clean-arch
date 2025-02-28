@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { RoleEntity } from '@modules/roles/infrastructure';
+import { RoleEntity } from '@modules/roles/infrastructure/persistence/role.entity';
 import { UserEntity } from '@modules/users/infrastructure';
 import { PermissionType } from '../../domain';
 

@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PermissionEntity } from '@modules/permissions/infrastructure';
+import { PermissionEntity } from '@modules/permissions/infrastructure/persistence/permission.entity';
 import { UserEntity } from '@modules/users/infrastructure';
 import { RoleType } from '../../domain';
 

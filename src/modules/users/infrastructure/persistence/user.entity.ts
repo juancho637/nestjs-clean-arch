@@ -88,13 +88,7 @@ export class UserEntity implements UserType {
   })
   roles?: RoleEntity[];
 
-  @ManyToMany(
-    () =>
-      forwardRef(
-        () => PermissionEntity,
-      ) as unknown as ObjectType<PermissionEntity>,
-    (permission) => permission.users,
-  )
+  @ManyToMany(() => PermissionEntity, (permission) => permission.users)
   @JoinTable({
     name: 'permission_user',
     joinColumn: {

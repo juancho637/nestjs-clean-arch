@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   HashProvidersEnum,
@@ -53,8 +53,8 @@ import { PermissionProvidersEnum } from '@modules/permissions/domain';
     ExceptionModule,
     HashModule,
     ConfigurationModule,
-    PermissionModule,
-    RoleModule,
+    forwardRef(() => PermissionModule),
+    forwardRef(() => RoleModule),
   ],
   controllers: [
     FindAllUsersController,

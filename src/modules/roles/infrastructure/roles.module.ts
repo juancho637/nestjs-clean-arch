@@ -30,12 +30,14 @@ import {
 } from './api';
 import { RoleEntity, RoleTypeOrmRepository } from './persistence';
 import { RolesSeeder } from './seeders';
+import { UserModule } from '@modules/users/infrastructure';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([RoleEntity]),
-    // forwardRef(() => PermissionModule),
-    PermissionModule,
+    forwardRef(() => PermissionModule),
+    forwardRef(() => UserModule),
+    // PermissionModule,
     LoggerModule,
     ExceptionModule,
   ],
