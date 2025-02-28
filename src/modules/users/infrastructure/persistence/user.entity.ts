@@ -10,10 +10,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PermissionEntity } from '@modules/permissions/infrastructure';
+import { PermissionEntity } from '@modules/permissions/infrastructure/persistence/permission.entity';
 import { RoleEntity } from '@modules/roles/infrastructure';
 import { UserType } from '../../domain';
-import { forwardRef } from '@nestjs/common';
 
 @Entity({ name: 'users' })
 export class UserEntity implements UserType {
