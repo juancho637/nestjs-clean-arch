@@ -73,11 +73,6 @@ export class JwtPassportStrategy extends PassportStrategy(Strategy, 'jwt') {
 
       return { data: userData, permissions: userPermissions };
     } catch (error) {
-      this.logger.error({
-        message: error,
-        context: this.context,
-      });
-
       throw error;
     }
   }

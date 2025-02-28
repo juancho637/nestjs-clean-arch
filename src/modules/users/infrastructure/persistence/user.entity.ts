@@ -5,12 +5,10 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
-  ObjectType,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PermissionEntity } from '@modules/permissions/infrastructure/persistence/permission.entity';
+import { PermissionEntity } from '@modules/permissions/infrastructure';
 import { RoleEntity } from '@modules/roles/infrastructure';
 import { UserType } from '../../domain';
 

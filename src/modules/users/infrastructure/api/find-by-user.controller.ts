@@ -31,7 +31,7 @@ export class FindByUserController {
   ) {}
 
   @Get('api/users/:id')
-  // @Auth<UserPermissionsEnum>(UserPermissionsEnum.READ_ANY_USER)
+  @Auth<UserPermissionsEnum>(UserPermissionsEnum.READ_ANY_USER)
   async run(@Param('id', ParseIntPipe) id: number): Promise<UserPresenter> {
     try {
       const user = await this.findByUserUseCase.run({

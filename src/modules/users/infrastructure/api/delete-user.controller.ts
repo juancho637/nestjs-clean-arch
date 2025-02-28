@@ -36,7 +36,7 @@ export class DeleteUserController {
   ) {}
 
   @Delete('api/users/:id')
-  // @Auth<UserPermissionsEnum>(UserPermissionsEnum.DELETE_ANY_USER)
+  @Auth<UserPermissionsEnum>(UserPermissionsEnum.DELETE_ANY_USER)
   async run(@Param('id', ParseIntPipe) id: number): Promise<UserPresenter> {
     try {
       const user = await this.deleteUserUseCase.run(id);

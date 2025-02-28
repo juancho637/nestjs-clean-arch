@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   LoggerProvidersEnum,
@@ -10,7 +10,6 @@ import {
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
 import { ExceptionModule } from '@common/adapters/exception/infrastructure';
-import { RoleModule } from '@modules/roles/infrastructure';
 import {
   PermissionProvidersEnum,
   PermissionRepositoryInterface,
@@ -22,13 +21,10 @@ import {
   FindAllPermissionsController,
   // FindByPermissionController,
 } from './api';
-import { UserModule } from '@modules/users/infrastructure';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([PermissionEntity]),
-    forwardRef(() => RoleModule),
-    forwardRef(() => UserModule),
     LoggerModule,
     ExceptionModule,
   ],
