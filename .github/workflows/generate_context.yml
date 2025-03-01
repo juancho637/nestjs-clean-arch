@@ -3,7 +3,9 @@ name: Generar Contexto del Repositorio
 on:
   push:
     branches:
-      - main # Puedes cambiar la rama según tu preferencia
+      - main
+    paths-ignore:
+      - 'contexto_repo.txt' # Evitar que el workflow se active cuando solo este archivo cambie
 
 jobs:
   generate-context:
@@ -12,6 +14,13 @@ jobs:
     steps:
       - name: 📥 Clonar el repositorio
         uses: actions/checkout@v3
+
+      - name: 🛑 Verificar si el commit fue hecho por GitHub Actions
+        run: |
+          if git log -1 --pretty=format:'%an' | grep -q 'github-actions'; then
+            echo "Este commit fue generado por GitHub Actions, deteniendo ejecución..."
+            exit 0
+          fi
 
       - name: 📝 Generar lista de archivos y contenido
         run: |
@@ -26,7 +35,7 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
           git add contexto_repo.txt
-          git commit -m "🔄 Actualización automática del contexto del repo"
+          git commit -m "🔄 Actualización automática del contexto del repo" || exit 0  # Evita error si no hay cambios
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Cambiar por MY_PAT_TOKEN si es necesario
