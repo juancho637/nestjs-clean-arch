@@ -20,6 +20,8 @@ jobs:
           tree -a -I '.git|node_modules|package-lock.json' >> contexto_repo.txt
 
           echo "\n### Contenido de archivos clave ###" >> contexto_repo.txt
+
+          # Incluir archivos de configuración importantes (SIN duplicados)
           find . -type f \( \
             -name ".env.example" \
             -o -name "package.json" \
@@ -35,7 +37,13 @@ jobs:
             -o -path "./.vscode/settings.json" \
             -o -path "./.github/workflows/generate_context.yml" \
             -o -name "README.md" \
-            \) \
+            \) ! -path "./node_modules/*" ! -path "./.git/*" \
+            -exec echo -e "\n----- {} -----\n" \; -exec cat {} \; >> contexto_repo.txt
+
+          # Incluir archivos de código fuente (SIN duplicados)
+          echo "\n### Contenido de archivos de código fuente ###" >> contexto_repo.txt
+          find src/ -type f \( -name "*.ts" -o -name "*.json" -o -name "*.md" -o -name "*.yml" -o -name "*.yaml" \) \
+            ! -path "./node_modules/*" ! -path "./.git/*" \
             -exec echo -e "\n----- {} -----\n" \; -exec cat {} \; >> contexto_repo.txt
 
       - name: 🔄 Crear nueva rama y hacer commit
