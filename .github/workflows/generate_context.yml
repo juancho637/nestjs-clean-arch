@@ -1,0 +1,32 @@
+name: Generar Contexto del Repositorio
+
+on:
+  push:
+    branches:
+      - main # Puedes cambiar la rama según tu preferencia
+
+jobs:
+  generate-context:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Clonar el repositorio
+        uses: actions/checkout@v3
+
+      - name: 📝 Generar lista de archivos y contenido
+        run: |
+          echo "### Estructura de archivos y carpetas ###" > contexto_repo.txt
+          tree -a -I '.git|node_modules' >> contexto_repo.txt
+
+          echo "\n### Contenido de archivos clave ###" >> contexto_repo.txt
+          find . -type f \( -name "*.ts" -o -name "*.json" -o -name "*.yml" -o -name "*.md" \) ! -path "*/node_modules/*" -exec echo -e "\n----- {} -----\n" \; -exec cat {} \; >> contexto_repo.txt
+
+      - name: 🔄 Commit y Push de la actualización
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add contexto_repo.txt
+          git commit -m "🔄 Actualización automática del contexto del repo"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
