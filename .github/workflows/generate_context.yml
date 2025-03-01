@@ -1,28 +1,18 @@
-name: Generar Contexto del Repositorio
+name: Actualizar Contexto y Crear Pull Request
 
 on:
   push:
     branches:
       - main
     paths-ignore:
-      - 'contexto_repo.txt' # Evita que el workflow se ejecute si solo se cambia este archivo
+      - 'contexto_repo.txt' # Evita que el workflow se dispare por cambios en este archivo
 
 jobs:
-  generate-context:
+  create-pull-request:
     runs-on: ubuntu-latest
-
     steps:
       - name: 📥 Clonar el repositorio
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # Necesario para trabajar con ramas
-
-      - name: 🛑 Verificar si el commit fue hecho por GitHub Actions
-        run: |
-          if git log -1 --pretty=format:'%an' | grep -q 'github-actions'; then
-            echo "Este commit fue generado por GitHub Actions, deteniendo ejecución..."
-            exit 0
-          fi
 
       - name: 📝 Generar lista de archivos y contenido
         run: |
@@ -32,35 +22,25 @@ jobs:
           echo "\n### Contenido de archivos clave ###" >> contexto_repo.txt
           find . -type f \( -name "*.ts" -o -name "*.json" -o -name "*.yml" -o -name "*.md" \) ! -path "*/node_modules/*" -exec echo -e "\n----- {} -----\n" \; -exec cat {} \; >> contexto_repo.txt
 
-      - name: 🔄 Crear nueva rama y hacer commit
+      - name: 🔄 Crear nueva rama
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
 
-          # Crear una nueva rama basada en main
           BRANCH_NAME="update-context-$(date +%Y%m%d%H%M%S)"
           git checkout -b $BRANCH_NAME
-
           git add contexto_repo.txt
           git commit -m "🔄 Actualización automática del contexto del repo" || exit 0
           git push origin $BRANCH_NAME
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🔀 Crear Pull Request automático
-        uses: actions/github-script@v6
+        uses: repo-sync/pull-request@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { owner, repo } = context.repo;
-            const branchName = "update-context-" + new Date().toISOString().replace(/[-:.TZ]/g, "");
-            const title = "🔄 Actualización automática del contexto del repo";
-            const body = "Este Pull Request fue generado automáticamente para actualizar `contexto_repo.txt` con la última estructura y contenido del repositorio.";
-
-            // Crear un Pull Request desde la nueva rama a main
-            github.rest.pulls.create({
-              owner,
-              repo,
-              title,
-              body,
-              head: branchName,
-              base: "main"
-            });
+          source_branch: ${{ github.ref }}
+          destination_branch: 'main'
+          pr_title: '🔄 Actualización automática del contexto del repo'
+          pr_body: 'Este Pull Request fue generado automáticamente para actualizar `contexto_repo.txt` con la última estructura y contenido del repositorio.'
+          pr_label: 'automated-pr'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
