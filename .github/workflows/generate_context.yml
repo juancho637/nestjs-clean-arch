@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'contexto_repo.txt' # Evitar que el workflow se active cuando solo este archivo cambie
+      - 'contexto_repo.txt' # Evita que el workflow se ejecute si solo se cambia este archivo
 
 jobs:
   generate-context:
@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: 📥 Clonar el repositorio
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Necesario para trabajar con ramas
 
       - name: 🛑 Verificar si el commit fue hecho por GitHub Actions
         run: |
@@ -30,12 +32,35 @@ jobs:
           echo "\n### Contenido de archivos clave ###" >> contexto_repo.txt
           find . -type f \( -name "*.ts" -o -name "*.json" -o -name "*.yml" -o -name "*.md" \) ! -path "*/node_modules/*" -exec echo -e "\n----- {} -----\n" \; -exec cat {} \; >> contexto_repo.txt
 
-      - name: 🔄 Commit y Push de la actualización
+      - name: 🔄 Crear nueva rama y hacer commit
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
+
+          # Crear una nueva rama basada en main
+          BRANCH_NAME="update-context-$(date +%Y%m%d%H%M%S)"
+          git checkout -b $BRANCH_NAME
+
           git add contexto_repo.txt
-          git commit -m "🔄 Actualización automática del contexto del repo" || exit 0  # Evita error si no hay cambios
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Cambiar por MY_PAT_TOKEN si es necesario
+          git commit -m "🔄 Actualización automática del contexto del repo" || exit 0
+          git push origin $BRANCH_NAME
+
+      - name: 🔀 Crear Pull Request automático
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const branchName = "update-context-" + new Date().toISOString().replace(/[-:.TZ]/g, "");
+            const title = "🔄 Actualización automática del contexto del repo";
+            const body = "Este Pull Request fue generado automáticamente para actualizar `contexto_repo.txt` con la última estructura y contenido del repositorio.";
+
+            // Crear un Pull Request desde la nueva rama a main
+            github.rest.pulls.create({
+              owner,
+              repo,
+              title,
+              body,
+              head: branchName,
+              base: "main"
+            });
