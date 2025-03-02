@@ -37,7 +37,7 @@ export class DevUsersSeeder {
 
       usersFields.push({
         name: personInfo.fullName(),
-        username: internetInfo.userName(),
+        username: internetInfo.username(),
         email: internetInfo.email(),
         password: password,
         status: 'ACTIVE',
