@@ -1,0 +1,15 @@
+meta {
+  name: Store User
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{URL}}/api/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{JWT_TOKEN}}
+}
