@@ -1,0 +1,13 @@
+{
+  "ignoreDirs": [
+    ".git",
+    "node_modules",
+    ".vscode",
+    "dist"
+  ],
+  "ignoreFiles": [
+    "package-lock.json",
+    ".env"
+  ],
+  "outDir": "./"
+}
