@@ -1,22 +1,21 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { PermissionProvidersEnum } from '@modules/permissions/domain';
-import { RoleProvidersEnum } from '@modules/roles/domain';
-import { UserProvidersEnum } from '@modules/users/domain';
-
 async function bootstrap() {
-  const app = await NestFactory.createApplicationContext(AppModule);
+  const env = process.env.APP_ENV;
 
-  const PermissionSeeder = app.get(PermissionProvidersEnum.PERMISSION_SEEDER);
-  const permissions = await PermissionSeeder.seed();
+  console.log(`🚀 Corriendo seeders para el entorno: ${env}`);
 
-  const roleSeeder = app.get(RoleProvidersEnum.ROLE_SEEDER);
-  const roles = await roleSeeder.seed(permissions);
+  if (env === 'dev') {
+    const { runDevSeeders } = await import('./seeders/dev.seeders');
 
-  const userSeeder = app.get(UserProvidersEnum.USER_SEEDER);
-  await userSeeder.seed(roles);
+    await runDevSeeders();
+  } else if (env === 'prod') {
+    const { runProdSeeders } = await import('./seeders/prod.seeders');
 
-  await app.close();
+    await runProdSeeders();
+  } else {
+    console.warn('⚠️ APP_ENV no definido correctamente. Usa dev o prod.');
+  }
+
+  process.exit(0);
 }
 
 bootstrap().catch((err) => console.error(err));

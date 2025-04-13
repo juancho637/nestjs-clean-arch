@@ -51,17 +51,6 @@ import { RolesSeeder } from './seeders';
       useClass: RoleTypeOrmRepository,
     },
     {
-      provide: RoleProvidersEnum.ROLE_SEEDER,
-      inject: [
-        RoleProvidersEnum.ROLE_REPOSITORY,
-        LoggerProvidersEnum.LOGGER_SERVICE,
-      ],
-      useFactory: (
-        roleRepositoy: RoleRepositoryInterface,
-        loggerService: LoggerServiceInterface,
-      ) => new RolesSeeder(roleRepositoy, loggerService),
-    },
-    {
       inject: [
         RoleProvidersEnum.ROLE_REPOSITORY,
         LoggerProvidersEnum.LOGGER_SERVICE,

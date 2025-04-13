@@ -32,13 +32,7 @@ import {
   StoreUserController,
   UpdateUserController,
 } from './api';
-import { DevUsersSeeder, ProdUsersSeeder } from './seeders';
 import { ConfigurationModule } from '@common/adapters/configuration/infrastructure';
-import {
-  AppConfigType,
-  ConfigurationType,
-} from '@common/adapters/configuration/domain';
-import { ConfigService } from '@nestjs/config';
 import { PermissionModule } from '@modules/permissions/infrastructure';
 import { RoleModule } from '@modules/roles/infrastructure';
 import { FindAllRolesUseCase } from '@modules/roles/application';
@@ -69,27 +63,6 @@ import { PermissionProvidersEnum } from '@modules/permissions/domain';
       useClass: UserTypeOrmRepository,
     },
     UserPolicy,
-    {
-      provide: UserProvidersEnum.USER_SEEDER,
-      inject: [
-        ConfigService,
-        UserProvidersEnum.USER_REPOSITORY,
-        HashProvidersEnum.HASH_SERVICE,
-        LoggerProvidersEnum.LOGGER_SERVICE,
-      ],
-      useFactory: (
-        configService: ConfigService<ConfigurationType>,
-        userRepository: UserRepositoryInterface,
-        hashService: HashServiceInterface,
-        loggerService: LoggerServiceInterface,
-      ) => {
-        const env = configService.get<AppConfigType>('app').env;
-
-        return env !== 'prod'
-          ? new DevUsersSeeder(userRepository, hashService, loggerService)
-          : new ProdUsersSeeder(userRepository, hashService, loggerService);
-      },
-    },
     {
       inject: [
         UserProvidersEnum.USER_REPOSITORY,

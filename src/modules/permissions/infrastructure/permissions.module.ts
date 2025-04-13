@@ -38,17 +38,6 @@ import {
       useClass: PermissionTypeOrmRepository,
     },
     {
-      provide: PermissionProvidersEnum.PERMISSION_SEEDER,
-      inject: [
-        PermissionProvidersEnum.PERMISSION_REPOSITORY,
-        LoggerProvidersEnum.LOGGER_SERVICE,
-      ],
-      useFactory: (
-        permissionRepositoy: PermissionRepositoryInterface,
-        loggerService: LoggerServiceInterface,
-      ) => new PermissionsSeeder(permissionRepositoy, loggerService),
-    },
-    {
       inject: [
         PermissionProvidersEnum.PERMISSION_REPOSITORY,
         LoggerProvidersEnum.LOGGER_SERVICE,
