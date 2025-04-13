@@ -23,9 +23,15 @@ export class StoreUserUseCase {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async run(createUser: CreateUserType): Promise<UserType> {
+  async run(createUser: CreateUserType, requestId: string): Promise<UserType> {
     try {
       const { rolesIds, permissionsIds, ...createUserFields } = createUser;
+
+      this.logger.log({
+        message: `Start StoreUserUseCase for ${createUserFields.email} and ${createUserFields.username}`,
+        context: this.context,
+        requestId,
+      });
 
       createUserFields['roles'] = this.validateRoles(rolesIds);
       createUserFields['permissions'] =
@@ -37,6 +43,12 @@ export class StoreUserUseCase {
         ...createUserFields,
         status: 'ACTIVE',
         password: hashPassword,
+      });
+
+      this.logger.log({
+        message: `End StoreUserUseCase for ${createUserFields.email} and ${createUserFields.username}`,
+        context: this.context,
+        requestId,
       });
 
       return user as UserType;
