@@ -13,9 +13,27 @@ services:
         networks:
             - app
         healthcheck:
-            test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
+            test: [ "CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}" ]
             retries: 3
             timeout: 5s
+
+    app:
+        build:
+            context: .
+            target: development
+        restart: always
+        volumes:
+            - .:/app
+            - ./node_modules:/app/node_modules
+        command: sh -c "npm install && npm run start:dev"
+        ports:
+            - "${APP_PORT}:3000"
+        env_file:
+            - .env
+        depends_on:
+            - pgsql
+        networks:
+            - app
 
 networks:
     app:

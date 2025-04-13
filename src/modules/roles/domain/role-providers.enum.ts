@@ -5,5 +5,4 @@ export enum RoleProvidersEnum {
   STORE_ROLE_USE_CASE = 'StoreRoleUseCase',
   UPDATE_ROLE_USE_CASE = 'UpdateRoleUseCase',
   DELETE_ROLE_USE_CASE = 'DeleteRoleUseCase',
-  ROLE_SEEDER = 'RoleSeeder',
 }
