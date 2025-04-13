@@ -1,6 +1,9 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { UserProvidersEnum } from '@modules/users/domain';
-import { FindByUserUseCase } from '@modules/users/application';
+import {
+  FindByUserUseCase,
+  StoreUserUseCase,
+} from '@modules/users/application';
 import { UserModule } from '@modules/users/infrastructure';
 import {
   TokenProvidersEnum,
@@ -23,8 +26,9 @@ import {
 } from '@common/adapters/exception/domain';
 import { ExceptionModule } from '@common/adapters/exception/infrastructure';
 import { AuthUseCasesEnum } from '../domain';
-import { SignInUseCase } from '../application';
+import { SignInUseCase, SignUpUseCase } from '../application';
 import { SignInController } from './api';
+import { SignUpController } from './api/sign-up.controller';
 
 @Module({
   imports: [
@@ -56,6 +60,30 @@ import { SignInController } from './api';
           findByUserUseCase,
           tokenService,
           hashService,
+          loggerService,
+          exceptionService,
+        ),
+    },
+    {
+      provide: AuthUseCasesEnum.SIGN_UP_USE_CASE,
+      inject: [
+        UserProvidersEnum.FIND_BY_USER_USE_CASE,
+        UserProvidersEnum.STORE_USER_USE_CASE,
+        TokenProvidersEnum.TOKEN_SERVICE,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      useFactory: (
+        findByUserUseCase: FindByUserUseCase,
+        storeUserUseCase: StoreUserUseCase,
+        tokenService: TokenServiceInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new SignUpUseCase(
+          findByUserUseCase,
+          storeUserUseCase,
+          tokenService,
           loggerService,
           exceptionService,
         ),
