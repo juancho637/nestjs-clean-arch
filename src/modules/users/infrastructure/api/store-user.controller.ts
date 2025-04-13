@@ -16,6 +16,7 @@ import {
 import { StoreUserUseCase } from '../../application';
 import { CreateUserDto } from '../dto';
 import { UserPresenter } from '../user.presenter';
+import { RequestId } from '@common/helpers/infrastructure';
 
 @Controller()
 export class StoreUserController {
@@ -32,9 +33,12 @@ export class StoreUserController {
 
   @Post('api/users')
   @Auth<UserPermissionsEnum>(UserPermissionsEnum.CREATE_ANY_USER)
-  async run(@Body() createUserDto: CreateUserDto): Promise<UserPresenter> {
+  async run(
+    @RequestId() requestId: string,
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<UserPresenter> {
     try {
-      const user = await this.storeUserUseCase.run(createUserDto);
+      const user = await this.storeUserUseCase.run(createUserDto, requestId);
 
       return new UserPresenter(user);
     } catch (error) {
