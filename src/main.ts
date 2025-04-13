@@ -1,6 +1,7 @@
-import { NestFactory } from '@nestjs/core';
+import { APP_GUARD, NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import helmet from 'helmet';
 import {
   AppConfigType,
   ConfigurationType,
@@ -11,9 +12,14 @@ import {
 } from '@common/helpers/infrastructure';
 import { LoggerProvidersEnum } from '@common/adapters/logger/domain';
 import { AppModule } from './app.module';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
+
+  app.enableCors();
+  app.use(helmet());
+
   const logger = app.get(LoggerProvidersEnum.LOGGER_SERVICE);
   const configService = app.get(ConfigService<ConfigurationType>);
   const { port } = configService.get<AppConfigType>('app');
