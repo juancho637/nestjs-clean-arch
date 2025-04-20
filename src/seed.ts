@@ -1,8 +1,6 @@
 async function bootstrap() {
   const env = process.env.APP_ENV;
 
-  console.log(`🚀 Corriendo seeders para el entorno: ${env}`);
-
   if (env === 'dev') {
     const { runDevSeeders } = await import('./seeders/dev.seeders');
 
