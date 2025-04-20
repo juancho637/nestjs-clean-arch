@@ -13,6 +13,8 @@ import { RoleModule } from '@modules/roles/infrastructure';
 import { UserModule } from '@modules/users/infrastructure';
 import { AuthModule } from '@modules/auth/infrastructure';
 
+import { McpModule } from './common/adapters/mcp/infrastructure/mcp.module';
+
 @Module({
   imports: [
     ThrottlerModule.forRoot({
@@ -37,6 +39,9 @@ import { AuthModule } from '@modules/auth/infrastructure';
     RoleModule,
     UserModule,
     AuthModule,
+
+    // MCP
+    McpModule.forRoot({ serverName: 'MiServidorMCP', version: '1.0.0' }),
   ],
   providers: [
     {
