@@ -239,3 +239,4 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,windows,linux,macos,node,dotenv
 
 **/*.context-generator.txt
+n8n_data
