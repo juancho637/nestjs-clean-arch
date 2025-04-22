@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { StateEntity } from '@modules/states/infrastructure';
 
 @Entity('countries')
 export class CountryEntity {
@@ -16,4 +17,7 @@ export class CountryEntity {
 
   @Column({ type: 'varchar', length: 5, name: 'flag' })
   flag: string;
+
+  @OneToMany(() => StateEntity, (state) => state.country)
+  states: StateEntity[];
 }

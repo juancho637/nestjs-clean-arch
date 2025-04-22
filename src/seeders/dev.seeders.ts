@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { DataSource } from 'typeorm';
 import { AppModule } from '../app.module';
 import {
   HashServiceInterface,
@@ -24,7 +25,7 @@ import { PermissionsSeeder } from '@modules/permissions/infrastructure';
 import { RolesSeeder } from '@modules/roles/infrastructure';
 import { DevUsersSeeder } from '@modules/users/infrastructure/seeders/dev-users.seeder';
 import { CountriesSeeder } from '@modules/countries/infrastructure';
-import { DataSource } from 'typeorm';
+import { StatesSeeder } from '@modules/states/infrastructure';
 
 export async function runDevSeeders() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -47,6 +48,7 @@ export async function runDevSeeders() {
   ).seed(permissions);
 
   await new CountriesSeeder(dataSource, loggerService).seed();
+  await new StatesSeeder(dataSource, loggerService).seed();
 
   await new DevUsersSeeder(
     app.get<UserRepositoryInterface>(UserProvidersEnum.USER_REPOSITORY),
