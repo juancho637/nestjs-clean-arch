@@ -13,9 +13,7 @@ export class StateEntity implements StateType {
   @Column({ type: 'varchar', length: 20 })
   status: string;
 
-  @ManyToOne(() => CountryEntity, (country) => country.states, {
-    nullable: false,
-  })
+  @ManyToOne(() => CountryEntity, (country) => country.states)
   @JoinColumn({ name: 'country_id' })
   country: CountryEntity;
 }
