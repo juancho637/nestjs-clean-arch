@@ -48,7 +48,7 @@ export async function runDevSeeders() {
   ).seed(permissions);
 
   await new CountriesSeeder(dataSource, loggerService).seed();
-  // await new StatesSeeder(dataSource, loggerService).seed();
+  await new StatesSeeder(dataSource, loggerService).seed();
 
   await new DevUsersSeeder(
     app.get<UserRepositoryInterface>(UserProvidersEnum.USER_REPOSITORY),
