@@ -38,7 +38,7 @@ import { AuthModule } from '@modules/auth/infrastructure';
     PermissionModule,
     RoleModule,
     CountryModule,
-    // StateModule,
+    StateModule,
     UserModule,
     AuthModule,
   ],
