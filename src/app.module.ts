@@ -10,6 +10,7 @@ import { ExceptionModule } from '@common/adapters/exception/infrastructure';
 import { TokenModule } from '@common/adapters/token/infrastructure';
 import { PermissionModule } from '@modules/permissions/infrastructure';
 import { RoleModule } from '@modules/roles/infrastructure';
+import { CountryModule } from '@modules/countries/infrastructure';
 import { UserModule } from '@modules/users/infrastructure';
 import { AuthModule } from '@modules/auth/infrastructure';
 
@@ -35,6 +36,7 @@ import { AuthModule } from '@modules/auth/infrastructure';
     // Modules
     PermissionModule,
     RoleModule,
+    CountryModule,
     UserModule,
     AuthModule,
   ],
