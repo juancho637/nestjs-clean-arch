@@ -1,0 +1,23 @@
+meta {
+  name: Get States
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{URL}}/api/states
+  body: json
+  auth: none
+}
+
+params:query {
+  ~sort: id|asc
+  ~name: like|valle del cauca
+}
+
+script:post-response {
+  if (res.body.data){
+    bru.setEnvVar("JWT_TOKEN", res.body.data.accessToken);    
+  }
+  
+}
