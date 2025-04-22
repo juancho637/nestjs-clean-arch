@@ -21,7 +21,6 @@ import { StateEntity, StateTypeOrmRepository } from './persistence';
     TypeOrmModule.forFeature([StateEntity]),
     LoggerModule,
     ExceptionModule,
-    CountryModule,
   ],
   controllers: [FindAllStatesController, FindByStateController],
   providers: [

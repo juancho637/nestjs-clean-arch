@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { DataSource } from 'typeorm';
+import { AppModule } from '../app.module';
 import {
   HashServiceInterface,
   HashProvidersEnum,
@@ -25,7 +26,6 @@ import { RolesSeeder } from '@modules/roles/infrastructure';
 import { DevUsersSeeder } from '@modules/users/infrastructure/seeders/dev-users.seeder';
 import { CountriesSeeder } from '@modules/countries/infrastructure';
 import { StatesSeeder } from '@modules/states/infrastructure';
-import { AppModule } from '../app.module';
 
 export async function runDevSeeders() {
   const app = await NestFactory.createApplicationContext(AppModule);

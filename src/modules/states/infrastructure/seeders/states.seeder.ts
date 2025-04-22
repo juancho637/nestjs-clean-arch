@@ -4,6 +4,23 @@ import { parse } from 'fast-csv';
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { StateStatusesEnum } from '../../domain';
 import { StateEntity } from '../persistence/state.entity';
+import { CountryEntity } from '@modules/countries/infrastructure';
+
+interface StateCsvRow {
+  id: string;
+  name: string;
+  country_id: string;
+}
+
+type StateInsertInput = {
+  id: number;
+  name: string;
+  status: StateStatusesEnum;
+  country: Omit<
+    CountryEntity,
+    'name' | 'isoCode' | 'phoneCode' | 'flag' | 'states'
+  >;
+};
 
 export class StatesSeeder {
   private readonly context = StatesSeeder.name;
@@ -22,7 +39,7 @@ export class StatesSeeder {
     await queryRunner.startTransaction();
 
     try {
-      let batch: Array<Partial<StateEntity> & { country_id: number }> = [];
+      let batch: StateInsertInput[] = [];
       const stream = createReadStream(filePath).pipe(
         parse({ headers: true, ignoreEmpty: true }),
       );
@@ -30,11 +47,11 @@ export class StatesSeeder {
       await new Promise<void>((resolve, reject) => {
         stream
           .on('error', (err) => reject(err))
-          .on('data', async (row: any) => {
+          .on('data', async (row: StateCsvRow) => {
             batch.push({
               id: parseInt(row.id, 10),
               name: row.name,
-              country_id: parseInt(row.country_id, 10),
+              country: { id: parseInt(row.country_id, 10) },
               status: StateStatusesEnum.ACTIVE,
             });
 

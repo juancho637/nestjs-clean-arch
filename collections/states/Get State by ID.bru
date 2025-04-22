@@ -1,0 +1,15 @@
+meta {
+  name: Get State by ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{URL}}/api/countries/48
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{JWT_TOKEN}}
+}

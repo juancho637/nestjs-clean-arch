@@ -42,7 +42,6 @@ export class CreateCountriesTable1715004780701 implements MigrationInterface {
       true,
     );
   }
-
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropTable('countries');
   }
