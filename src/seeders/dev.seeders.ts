@@ -23,9 +23,9 @@ import {
 } from '@modules/roles/domain';
 import { PermissionsSeeder } from '@modules/permissions/infrastructure';
 import { RolesSeeder } from '@modules/roles/infrastructure';
-import { DevUsersSeeder } from '@modules/users/infrastructure/seeders/dev-users.seeder';
 import { CountriesSeeder } from '@modules/countries/infrastructure';
 import { StatesSeeder } from '@modules/states/infrastructure';
+import { DevUsersSeeder } from '@modules/users/infrastructure/seeders/dev-users.seeder';
 
 export async function runDevSeeders() {
   const app = await NestFactory.createApplicationContext(AppModule);

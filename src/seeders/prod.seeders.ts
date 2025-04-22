@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { DataSource } from 'typeorm';
 import { AppModule } from '../app.module';
 import {
   HashServiceInterface,
@@ -22,10 +23,13 @@ import {
 } from '@modules/roles/domain';
 import { PermissionsSeeder } from '@modules/permissions/infrastructure';
 import { RolesSeeder } from '@modules/roles/infrastructure';
+import { CountriesSeeder } from '@modules/countries/infrastructure';
+import { StatesSeeder } from '@modules/states/infrastructure';
 import { ProdUsersSeeder } from '@modules/users/infrastructure/seeders/prod-users.seeder';
 
 export async function runProdSeeders() {
   const app = await NestFactory.createApplicationContext(AppModule);
+  const dataSource = app.get<DataSource>(DataSource);
 
   const loggerService = app.get<LoggerServiceInterface>(
     LoggerProvidersEnum.LOGGER_SERVICE,
@@ -42,6 +46,9 @@ export async function runProdSeeders() {
     app.get<RoleRepositoryInterface>(RoleProvidersEnum.ROLE_REPOSITORY),
     loggerService,
   ).seed(permissions);
+
+  await new CountriesSeeder(dataSource, loggerService).seed();
+  await new StatesSeeder(dataSource, loggerService).seed();
 
   await new ProdUsersSeeder(
     app.get<UserRepositoryInterface>(UserProvidersEnum.USER_REPOSITORY),
