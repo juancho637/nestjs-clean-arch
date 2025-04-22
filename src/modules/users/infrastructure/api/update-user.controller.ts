@@ -38,7 +38,7 @@ export class UpdateUserController {
   ) {}
 
   @Put('api/users/:id')
-  // @Auth<UserPermissionsEnum>(UserPermissionsEnum.UPDATE_ANY_USER)
+  @Auth<UserPermissionsEnum>(UserPermissionsEnum.UPDATE_ANY_USER)
   async run(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,

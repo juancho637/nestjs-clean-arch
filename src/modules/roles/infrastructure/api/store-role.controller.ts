@@ -31,7 +31,7 @@ export class StoreRoleController {
   ) {}
 
   @Post('api/roles')
-  // @Auth<RolePermissionsEnum>(RolePermissionsEnum.CREATE_ROLE)
+  @Auth<RolePermissionsEnum>(RolePermissionsEnum.CREATE_ROLE)
   async run(@Body() createRoleDto: CreateRoleDto): Promise<RolePresenter> {
     try {
       const role = await this.storeRoleUseCase.run(createRoleDto);

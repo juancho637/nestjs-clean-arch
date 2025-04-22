@@ -31,7 +31,7 @@ export class FindByRoleController {
   ) {}
 
   @Get('api/roles/:id')
-  // @Auth<RolePermissionsEnum>(RolePermissionsEnum.READ_ROLE)
+  @Auth<RolePermissionsEnum>(RolePermissionsEnum.READ_ROLE)
   async run(@Param('id', ParseIntPipe) id: number): Promise<RolePresenter> {
     try {
       const role = await this.findByRoleUseCase.run({

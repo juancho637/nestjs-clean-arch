@@ -38,7 +38,7 @@ export class UpdateRoleController {
   ) {}
 
   @Put('api/roles/:id')
-  // @Auth<RolePermissionsEnum>(RolePermissionsEnum.UPDATE_ROLE)
+  @Auth<RolePermissionsEnum>(RolePermissionsEnum.UPDATE_ROLE)
   async run(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateRoleDto: UpdateRoleDto,
