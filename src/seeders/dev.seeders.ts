@@ -23,9 +23,12 @@ import {
 import { PermissionsSeeder } from '@modules/permissions/infrastructure';
 import { RolesSeeder } from '@modules/roles/infrastructure';
 import { DevUsersSeeder } from '@modules/users/infrastructure/seeders/dev-users.seeder';
+import { CountriesSeeder } from '@modules/countries/infrastructure';
+import { DataSource } from 'typeorm';
 
 export async function runDevSeeders() {
   const app = await NestFactory.createApplicationContext(AppModule);
+  const dataSource = app.get<DataSource>(DataSource);
 
   const loggerService = app.get<LoggerServiceInterface>(
     LoggerProvidersEnum.LOGGER_SERVICE,
@@ -42,6 +45,8 @@ export async function runDevSeeders() {
     app.get<RoleRepositoryInterface>(RoleProvidersEnum.ROLE_REPOSITORY),
     loggerService,
   ).seed(permissions);
+
+  await new CountriesSeeder(dataSource, loggerService).seed();
 
   await new DevUsersSeeder(
     app.get<UserRepositoryInterface>(UserProvidersEnum.USER_REPOSITORY),

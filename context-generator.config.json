@@ -2,11 +2,14 @@
   "ignoreDirs": [
     ".git",
     "node_modules",
+    "n8n_data",
+    "collections",
     ".vscode",
     "dist"
   ],
   "ignoreFiles": [
     "package-lock.json",
+    "*.csv",
     ".env"
   ],
   "outDir": "./"

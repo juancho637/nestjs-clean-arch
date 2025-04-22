@@ -1,0 +1,23 @@
+meta {
+  name: Get Countries
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{URL}}/api/countries
+  body: json
+  auth: none
+}
+
+params:query {
+  ~isoCode: like|US
+  ~name: like|colombia
+}
+
+script:post-response {
+  if (res.body.data){
+    bru.setEnvVar("JWT_TOKEN", res.body.data.accessToken);    
+  }
+  
+}
