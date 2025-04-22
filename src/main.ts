@@ -12,7 +12,6 @@ import {
 } from '@common/helpers/infrastructure';
 import { LoggerProvidersEnum } from '@common/adapters/logger/domain';
 import { AppModule } from './app.module';
-import { ThrottlerGuard } from '@nestjs/throttler';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
