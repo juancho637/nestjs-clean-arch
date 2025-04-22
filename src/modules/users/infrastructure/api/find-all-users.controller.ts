@@ -46,7 +46,7 @@ export class FindAllUsersController {
   ) {}
 
   @Get('api/users')
-  @Auth<UserPermissionsEnum>(UserPermissionsEnum.LIST_ANY_USER)
+  // @Auth<UserPermissionsEnum>(UserPermissionsEnum.LIST_ANY_USER)
   async run(
     @PaginationParams() paginationParams?: PaginationType,
     @SortingParams<UserFilterType>('id', 'email', 'name', 'username')

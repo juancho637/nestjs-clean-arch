@@ -36,7 +36,7 @@ export class DeleteRoleController {
   ) {}
 
   @Delete('api/roles/:id')
-  @Auth<RolePermissionsEnum>(RolePermissionsEnum.DELETE_ROLE)
+  // @Auth<RolePermissionsEnum>(RolePermissionsEnum.DELETE_ROLE)
   async run(@Param('id', ParseIntPipe) id: number): Promise<RolePresenter> {
     try {
       const role = await this.deleteRoleUseCase.run(id);

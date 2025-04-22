@@ -43,7 +43,7 @@ export class FindAllRolesController {
   ) {}
 
   @Get('api/roles')
-  @Auth<RolePermissionsEnum>(RolePermissionsEnum.LIST_ROLE)
+  // @Auth<RolePermissionsEnum>(RolePermissionsEnum.LIST_ROLE)
   async run(
     @PaginationParams() paginationParams?: PaginationType,
     @SortingParams<RoleFilterType>('id', 'name', 'status')

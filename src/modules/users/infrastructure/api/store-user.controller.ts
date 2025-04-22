@@ -32,7 +32,7 @@ export class StoreUserController {
   ) {}
 
   @Post('api/users')
-  @Auth<UserPermissionsEnum>(UserPermissionsEnum.CREATE_ANY_USER)
+  // @Auth<UserPermissionsEnum>(UserPermissionsEnum.CREATE_ANY_USER)
   async run(
     @RequestId() requestId: string,
     @Body() createUserDto: CreateUserDto,
