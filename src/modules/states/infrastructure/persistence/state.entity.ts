@@ -1,5 +1,13 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
 import { CountryEntity } from '@modules/countries/infrastructure';
+import { CityEntity } from '@modules/cities/infrastructure';
 import { StateType } from '../../../states/domain';
 
 @Entity('states')
@@ -16,4 +24,7 @@ export class StateEntity implements StateType {
   @ManyToOne(() => CountryEntity, (country) => country.states)
   @JoinColumn({ name: 'country_id' })
   country: CountryEntity;
+
+  @OneToMany(() => CityEntity, (city) => city.state)
+  cities: CityEntity[];
 }

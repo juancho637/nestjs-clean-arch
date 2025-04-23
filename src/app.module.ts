@@ -12,6 +12,7 @@ import { PermissionModule } from '@modules/permissions/infrastructure';
 import { RoleModule } from '@modules/roles/infrastructure';
 import { CountryModule } from '@modules/countries/infrastructure';
 import { StateModule } from '@modules/states/infrastructure';
+import { CityModule } from '@modules/cities/infrastructure';
 import { UserModule } from '@modules/users/infrastructure';
 import { AuthModule } from '@modules/auth/infrastructure';
 
@@ -39,6 +40,7 @@ import { AuthModule } from '@modules/auth/infrastructure';
     RoleModule,
     CountryModule,
     StateModule,
+    CityModule,
     UserModule,
     AuthModule,
   ],

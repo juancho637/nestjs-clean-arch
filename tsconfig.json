@@ -32,6 +32,7 @@
       "@modules/roles/*": ["./src/modules/roles/*"],
       "@modules/countries/*": ["./src/modules/countries/*"],
       "@modules/states/*": ["./src/modules/states/*"],
+      "@modules/cities/*": ["./src/modules/cities/*"],
       "@modules/users/*": ["./src/modules/users/*"],
       "@modules/auth/*": ["./src/modules/auth/*"]
     }

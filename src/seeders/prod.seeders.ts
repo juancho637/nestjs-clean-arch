@@ -25,6 +25,7 @@ import { PermissionsSeeder } from '@modules/permissions/infrastructure';
 import { RolesSeeder } from '@modules/roles/infrastructure';
 import { CountriesSeeder } from '@modules/countries/infrastructure';
 import { StatesSeeder } from '@modules/states/infrastructure';
+import { CitiesSeeder } from '@modules/cities/infrastructure';
 import { ProdUsersSeeder } from '@modules/users/infrastructure/seeders/prod-users.seeder';
 
 export async function runProdSeeders() {
@@ -49,6 +50,7 @@ export async function runProdSeeders() {
 
   await new CountriesSeeder(dataSource, loggerService).seed();
   await new StatesSeeder(dataSource, loggerService).seed();
+  await new CitiesSeeder(dataSource, loggerService).seed();
 
   await new ProdUsersSeeder(
     app.get<UserRepositoryInterface>(UserProvidersEnum.USER_REPOSITORY),
